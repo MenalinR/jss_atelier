@@ -8,7 +8,7 @@ interface Props{
 
 const Logo = ({children,className}: Props) => {
   return <Link href={"/"}>
-  <h2 className={cn("text-2xl text-darkColor font-black tracking-wider uppercase")}>{children}</h2>
+  <h2 className={cn("text-2xl text-darkColor font-black tracking-wider uppercase",className)}>{children}</h2>
   </Link>
 }
 
