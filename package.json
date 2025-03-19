@@ -23,6 +23,7 @@
     "@radix-ui/react-tooltip": "^1.1.5",
     "@sanity/icons": "^3.5.2",
     "@sanity/image-url": "^1.1.0",
+    "@sanity/schema": "^3.80.1",
     "@sanity/vision": "^3.67.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
