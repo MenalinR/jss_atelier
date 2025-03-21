@@ -22,5 +22,21 @@ export const categoryType = defineType({
       name: 'description',
       type: 'text',
     }),
+    defineField({
+      name: "image",
+      title: "Category",
+      type: "image",
+      options:{
+        hotspot:true,
+      },
+
+    }),
   ],
-})
+  preview:{
+    select:{
+      title:"title",
+      subtitle:"description",
+      media: "image",
+    },
+  },
+});
