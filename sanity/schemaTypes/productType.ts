@@ -1,11 +1,11 @@
-import { TrolleyIcon } from "@sanity/icons";
+// import { TrolleyIcon } from "@sanity/icons";
 import { defineField, defineType } from "sanity";
 
 export const productType = defineType({
     name: "product",
     title: "product",
     type: "document",
-    icon: TrolleyIcon,
+  
     fields:[
         defineField({
             name: "name",
@@ -40,14 +40,15 @@ export const productType = defineType({
             type: "string",
         }),
         defineField({
-            name: "price",
-            title: "Product Price",
+            name: "price", 
             type: "number",
+            title: 'Product Price (LKR)', // Update label
+            description: 'Enter price in Sri Lankan Rupees (LKR)', // Add description
             validation: (Rule) => Rule.required(),
         }),
         defineField({
             name: "discount",
-            title: "Discount Price",
+            title: "Discount Percentage",
             type: "number",
             validation: (Rule) => Rule.required(),
         }),
@@ -95,18 +96,18 @@ export const productType = defineType({
     ],
     preview: {
         select: {
-            title:"name",
-            media: "images",
-            subtitle:"price",
+          title: "name",
+          media: "images",
+          subtitle: "price",
         },
-        prepare(selection){
-            const {title,subtitle,media}=selection
-            const image=media && media[0]
-            return{
-                title:title,
-                subtitle:`$${subtitle}`,
-                media:image,
-            };
+        prepare(selection) {
+          const { title, subtitle, media } = selection;
+          const image = media && media[0];
+          return {
+            title: title,
+            subtitle: `$${subtitle}`,
+            media: image,
+          };
         },
     },
 });

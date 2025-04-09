@@ -8,7 +8,7 @@ export const headerData = [
 {title:"Gift",href:"/gift"},
 ];
 
-export const ProductType= [
+export const productType= [
     { title: "Travel Inspired Art",value:"travelart"},
     { title: "Boho Art",value:"bohoart"},
     { title: "Modern Art",value:"modernart"},

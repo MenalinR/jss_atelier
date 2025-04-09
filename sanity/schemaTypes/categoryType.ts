@@ -1,11 +1,11 @@
-import {TagIcon} from '@sanity/icons'
+// import {TagIcon} from '@sanity/icons'
 import {defineField, defineType} from 'sanity'
 
 export const categoryType = defineType({
   name: 'category',
   title: 'Category',
   type: 'document',
-  icon: TagIcon,
+ 
   fields: [
     defineField({
       name: 'title',
@@ -24,7 +24,7 @@ export const categoryType = defineType({
     }),
     defineField({
       name: "image",
-      title: "Category",
+      title: "Category Image",
       type: "image",
       options:{
         hotspot:true,

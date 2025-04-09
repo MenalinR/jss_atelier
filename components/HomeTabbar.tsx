@@ -1,4 +1,4 @@
-import { ProductType } from '@/constants';
+import { productType } from '@/constants';
 import { title } from 'process';
 import React from 'react'
 import { Repeat } from 'lucide-react';
@@ -13,7 +13,7 @@ const HomeTabbar = ({selectedTab,onTabSelect}:Props) => {
   return (
     <div className='flex items-center gap-1.5 text-sm font-semibold'>
         <div className='flex items-center gap-1.5'>
-            {ProductType?.map((item) => (
+            {productType?.map((item) => (
                 <button key={item?.title}
                 onClick={() => onTabSelect(item?.title)}
                 className={`border border-darkColor px-4 py-1.5 md:px-6 md:py-2 rounded-full hover:bg-darkColor hover:text-white  ${selectedTab === item?.title && "bg-darkColor text-white"}`}
