@@ -15,3 +15,10 @@ export const productType= [
     { title: "Landscapes Art",value:"landscapesart"},
     { title: "Nature Art",value:"natureart"},
 ];
+
+export const quickLinksData = [
+    { title: "About us", href:"/about"},
+    { title: "Contact us", href:"/contact"},
+    { title: "Terms & Conditions", href:"/terms"},
+    { title: "Privacy Policy", href:"/privacy"},
+]
