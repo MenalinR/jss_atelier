@@ -1,5 +1,6 @@
 // import { TrolleyIcon } from "@sanity/icons";
 import { defineField, defineType } from "sanity";
+import { productType as productTypes } from "../../constants";
 
 export const productType = defineType({
     name: "product",
@@ -82,13 +83,8 @@ export const productType = defineType({
             title: "Product Type",
             type: "string",
             options:{
-               list: [
-                {title: "Travel Inspired Art", value: "travel Inspired Art"},
-                { title: "Boho Art",value:"bohoart"},
-                { title: "Modern Art",value:"modernart"},
-                { title: "Landscapes Art",value:"landscapesart"},
-                { title: "Nature Art",value:"natureart"},
-               ],
+               // Same list as the home page tabs
+               list: productTypes,
             },
             
         }),
@@ -105,7 +101,7 @@ export const productType = defineType({
           const image = media && media[0];
           return {
             title: title,
-            subtitle: `$${subtitle}`,
+            subtitle: `LKR ${subtitle}`,
             media: image,
           };
         },

@@ -5,17 +5,23 @@ import Logo from './Logo';
 import SocialMedia from './SocialMedia';
 import { quickLinksData, headerData } from '@/constants';
 import Link from 'next/link';
+import { getSiteSettings } from '@/sanity/lib/siteSettings';
+import { isAdmin } from '@/lib/admin';
+import SiteSettingsEditor from './admin/SiteSettingsEditor';
 
-const Footer = () => {
+const Footer = async () => {
+  const settings = await getSiteSettings();
+  const admin = await isAdmin();
   return (
   <footer className='bg-white border-t'>
    
     <Container>
-    <FooterTop/>
+    {admin && <div className='flex justify-end pt-4'><SiteSettingsEditor settings={settings} /></div>}
+    <FooterTop settings={settings}/>
     <div className='py-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8'>
       <div className='space-y-4'>
         <Logo>JSS</Logo>
-        <p className='text-gray-600 text-sm'>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Magnam tempora nobis recusandae neque quaerat veniam hic officiis quasi.</p>
+        <p className='text-gray-600 text-sm'>{settings.footerAbout}</p>
         
       </div>
       <div>

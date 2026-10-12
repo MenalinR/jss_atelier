@@ -8,24 +8,31 @@ import ProductCard from './ProductCard';
 import NoProductsAvailable from './NoProductsAvailable';
 import {motion,AnimatePresence} from "motion/react"
 import { Loader2 } from 'lucide-react';
+import ProductEditor from './admin/ProductEditor';
 
-const ProductGrid = () => {
+const ProductGrid = ({isAdmin = false}:{isAdmin?: boolean}) => {
   const [selectedTab, setSelectedTab] = useState(productType[0]?.title || "");
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
-  const query = `*[_type == "product" && lower(variant) == $variant] { 
-    _id, name, slug, images, price, intro, description, variant 
+  const [reloadCount, setReloadCount] = useState(0);
+  // Match the tab's stored value, or its title (older products were saved with the title)
+  const query = `*[_type == "product" && lower(variant) in [$value, $title]] { 
+    _id, name, slug, images, price, discount, stock, status, intro, description, variant 
   }`;
   
-  
-  const params = { variant: selectedTab.toLocaleLowerCase() };
+  const tab = productType.find((item) => item.title === selectedTab);
+  const params = {
+    value: (tab?.value || "").toLowerCase(),
+    title: selectedTab.toLowerCase(),
+  };
   
   useEffect(() => {
   
     const fetchData = async () => {
       setLoading(true);
       try {
-        const response = await client.fetch(query,params);
+        // Admins skip the CDN so their edits show up straight away
+        const response = await client.withConfig({ useCdn: !isAdmin }).fetch(query,params);
         setProducts(await response);
       } catch (error) {
         console.error("Product fetching Error", error);
@@ -35,12 +42,21 @@ const ProductGrid = () => {
     };
   
     fetchData();
-  }, [selectedTab]);
+  }, [selectedTab, reloadCount]);
+
+  const reload = () => setReloadCount((count) => count + 1);
   
    
   return (
     <div className='mt-10 flex flex-col items-center'>
         <HomeTabbar  selectedTab={selectedTab} onTabSelect={setSelectedTab} />
+        {isAdmin && (
+          <ProductEditor
+            className='mt-5'
+            defaultVariant={productType.find((item) => item.title === selectedTab)?.value}
+            onSaved={reload}
+          />
+        )}
         {loading ? (
           <div className='flex flex-col items-center justify-center py-10 min-h-80 space-y-4 text-center bg-gray-100 rounded-lg w-full mt-10'>
             <div className='flex items-center space-x-2 text-blue-600'>
@@ -53,7 +69,7 @@ const ProductGrid = () => {
           {products?.length ?(
             <div  className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 mt-10 w-full'>
           {products?.map((product:Product)=>( <div key={product?._id}>
-            <ProductCard product={product}/>
+            <ProductCard product={product} isAdmin={isAdmin} onSaved={reload}/>
           </div>
           ))}
           </div>

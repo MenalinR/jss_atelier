@@ -5,9 +5,15 @@ export const structure: StructureResolver = (S) =>
   S.list()
     .title('JSS Backend')
     .items([
+      // Singleton: always opens the one "siteSettings" document
+      S.listItem()
+        .title('Site Settings')
+        .id('siteSettings')
+        .child(S.document().schemaType('siteSettings').documentId('siteSettings')),
+      S.divider(),
       S.documentTypeListItem('category').title('Categories'),
       S.divider(),
       ...S.documentTypeListItems().filter(
-        (item) => item.getId() && !['category'].includes(item.getId()!),
+        (item) => item.getId() && !['category', 'siteSettings'].includes(item.getId()!),
       ),
     ])

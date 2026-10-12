@@ -1,43 +1,45 @@
 import { MapPin, Phone } from 'lucide-react';
 import React from 'react'
+import { SiteSettings } from '@/sanity/lib/siteSettings';
 
 interface Props{
     title: string;
     subtitle: string;
     icon: React.ReactNode;
 }
-const data: Props[] = [
+const getData = (settings: SiteSettings): Props[] => [
 {
     title:"Visit Us",
-    subtitle:"B10, Maddumagewatta, Housing Scheme,Nugegoda",
+    subtitle:settings.address,
     icon:(
     <MapPin className='text-gray-600 group-hover:text-darkColor transition-colors'/>),
 
 },
 {
     title:"Call Us",
-    subtitle:"0761111111",
+    subtitle:settings.phone,
     icon:(
     <Phone className='text-gray-600 group-hover:text-darkColor transition-colors'/>),
     
 },
 {
     title:"Business  Hours",
-    subtitle:"Mon- Sat: 9:00 AM - 7:00 PM",
+    subtitle:settings.businessHours,
     icon:(
     <MapPin className='text-gray-600 group-hover:text-darkColor transition-colors'/>),
     
 },
 {
     title:"Email Us",
-    subtitle:"jss09@gmail.com",
+    subtitle:settings.email,
     icon:(
     <Phone className='text-gray-600 group-hover:text-darkColor transition-colors'/>),
     
 },
 ]
 
-const FooterTop = () => {
+const FooterTop = ({settings}:{settings: SiteSettings}) => {
+  const data = getData(settings);
   return <div className='grid grid-cols-2 lg:grid-cols-4 gap-8 border-b'>{data?.map((item,index) =>( <ContactItem key={index} icon={item?.icon} title={item?.title} subtitle={item?.subtitle}/>))}</div>
   
 };

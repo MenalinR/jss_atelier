@@ -4,6 +4,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import {ClerkProvider} from "@clerk/nextjs";
 import localFont from "next/font/local";
+import { isAdmin } from "@/lib/admin";
 
 const raleway = localFont({
   src: "../fonts/Raleway.woff2",
@@ -16,17 +17,23 @@ export const metadata: Metadata = {
   description: "An ecommerce app for selling purposes",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const admin = await isAdmin();
   return (
     <ClerkProvider>
       <html lang="en">
       <body
         className={`${raleway.variable}antialiased`}
       >
+        {admin && (
+          <div className="bg-darkColor text-white text-xs font-semibold text-center py-1.5">
+            Admin mode – use the ✎ buttons to edit the website
+          </div>
+        )}
         <Header />
         {children}
         <Footer />
