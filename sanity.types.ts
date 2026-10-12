@@ -90,6 +90,8 @@ export type Product = {
   }>;
   intro?: string;
   description?: string;
+  medium?: string;
+  dimensions?: string;
   price?: number;
   discount?: number;
   categories?: Array<{
@@ -101,7 +103,7 @@ export type Product = {
   }>;
   stock?: number;
   status?: "new" | "hot" | "sale";
-  variant?: "travel Inspired Art" | "bohoart" | "modernart" | "landscapesart" | "natureart";
+  variant?: string;
 };
 
 export type Category = {

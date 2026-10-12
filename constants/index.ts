@@ -22,3 +22,9 @@ export const quickLinksData = [
     { title: "Terms & Conditions", href:"/terms"},
     { title: "Privacy Policy", href:"/privacy"},
 ]
+
+// Older products were saved with the tab title instead of its value
+export const findProductType = (variant?: string) =>
+    productType.find(
+        (item) => item.value === variant || item.title.toLowerCase() === variant?.toLowerCase()
+    );

@@ -17,7 +17,7 @@ const ProductGrid = ({isAdmin = false}:{isAdmin?: boolean}) => {
   const [reloadCount, setReloadCount] = useState(0);
   // Match the tab's stored value, or its title (older products were saved with the title)
   const query = `*[_type == "product" && lower(variant) in [$value, $title]] { 
-    _id, name, slug, images, price, discount, stock, status, intro, description, variant 
+    _id, name, slug, images, price, discount, stock, status, intro, description, medium, dimensions, variant 
   }`;
   
   const tab = productType.find((item) => item.title === selectedTab);

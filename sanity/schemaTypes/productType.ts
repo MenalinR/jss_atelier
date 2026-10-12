@@ -41,6 +41,18 @@ export const productType = defineType({
             type: "string",
         }),
         defineField({
+            name: "medium",
+            title: "Medium",
+            type: "string",
+            description: 'For example "Painting, Acrylic on Canvas"',
+        }),
+        defineField({
+            name: "dimensions",
+            title: "Size",
+            type: "string",
+            description: 'For example "37.4 W x 48 H in"',
+        }),
+        defineField({
             name: "price", 
             type: "number",
             title: 'Product Price (LKR)', // Update label

@@ -5,7 +5,7 @@ import Image from "next/image";
 import { X } from "lucide-react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { deleteProduct, saveProduct } from "@/app/actions/admin";
-import { productType } from "@/constants";
+import { findProductType, productType } from "@/constants";
 import { Product } from "@/sanity.types";
 import { urlFor } from "@/sanity/lib/image";
 import { EditButton, Field, FormActions, inputClassName } from "./AdminFields";
@@ -17,16 +17,12 @@ interface Props {
   product?: Product;
   defaultVariant?: string;
   onSaved: () => void;
+  // Defaults to onSaved
+  onDeleted?: () => void;
   className?: string;
 }
 
-// Older products were saved with the tab title instead of its value
-const findVariantValue = (variant?: string) =>
-  productType.find(
-    (item) => item.value === variant || item.title.toLowerCase() === variant?.toLowerCase()
-  )?.value || "";
-
-const ProductEditor = ({ product, defaultVariant, onSaved, className }: Props) => {
+const ProductEditor = ({ product, defaultVariant, onSaved, onDeleted, className }: Props) => {
   const [open, setOpen] = useState(false);
   const [error, setError] = useState<string>();
   const [pending, startTransition] = useTransition();
@@ -48,10 +44,10 @@ const ProductEditor = ({ product, defaultVariant, onSaved, className }: Props) =
     return () => urls.forEach((url) => URL.revokeObjectURL(url));
   }, [newFiles]);
 
-  const finish = (result: { ok: boolean; error?: string }) => {
+  const finish = (result: { ok: boolean; error?: string }, done = onSaved) => {
     if (!result.ok) return setError(result.error);
     setOpen(false);
-    onSaved();
+    done();
   };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -67,7 +63,7 @@ const ProductEditor = ({ product, defaultVariant, onSaved, className }: Props) =
   const handleDelete = () => {
     if (!product?._id || !confirm(`Delete "${product.name}"? This cannot be undone.`)) return;
     setError(undefined);
-    startTransition(async () => finish(await deleteProduct(product._id)));
+    startTransition(async () => finish(await deleteProduct(product._id), onDeleted ?? onSaved));
   };
 
   return (
@@ -141,6 +137,12 @@ const ProductEditor = ({ product, defaultVariant, onSaved, className }: Props) =
               <textarea name="description" rows={3} defaultValue={product?.description} className={inputClassName} />
             </Field>
             <div className="grid grid-cols-2 gap-3">
+              <Field label="Medium">
+                <input name="medium" placeholder="Painting, Acrylic on Canvas" defaultValue={product?.medium} className={inputClassName} />
+              </Field>
+              <Field label="Size">
+                <input name="dimensions" placeholder="37.4 W x 48 H in" defaultValue={product?.dimensions} className={inputClassName} />
+              </Field>
               <Field label="Price (LKR)">
                 <input name="price" type="number" min={0} step="0.01" required defaultValue={product?.price} className={inputClassName} />
               </Field>
@@ -162,7 +164,7 @@ const ProductEditor = ({ product, defaultVariant, onSaved, className }: Props) =
             <Field label="Product type (home page tab)">
               <select
                 name="variant"
-                defaultValue={findVariantValue(product?.variant) || defaultVariant || ""}
+                defaultValue={findProductType(product?.variant)?.value || defaultVariant || ""}
                 className={inputClassName}
               >
                 <option value="">None</option>

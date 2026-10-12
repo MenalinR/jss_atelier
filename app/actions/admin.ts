@@ -127,6 +127,8 @@ export const saveProduct = async (formData: FormData) =>
       name,
       intro: text(formData, "intro"),
       description: text(formData, "description"),
+      medium: text(formData, "medium"),
+      dimensions: text(formData, "dimensions"),
       price,
       discount,
       stock: stockText ? Math.max(0, Number(stockText)) : undefined,
