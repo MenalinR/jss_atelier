@@ -40,21 +40,21 @@ const ProductPage = async ({ params }: Props) => {
   return (
     <Container className='py-8'>
       <nav className='flex flex-wrap items-center gap-2 text-sm text-lightColor mb-6'>
-        <Link href='/' className='underline hover:text-darkColor hoverEffect'>All Artworks</Link>
+        <Link href='/' className='hover:text-brand-600 hoverEffect'>All Artworks</Link>
         {type && (<><span>/</span><span>{type.title}</span></>)}
         <span>/</span>
         <span className='text-darkColor'>{product.name}</span>
       </nav>
 
-      <div className='grid grid-cols-1 lg:grid-cols-[3fr_2fr] gap-10'>
+      <div className='grid grid-cols-1 lg:grid-cols-[3fr_2fr] gap-10 rounded-3xl bg-white p-4 md:p-8 shadow-sm ring-1 ring-slate-200'>
         <ProductGallery images={product.images} name={product.name} />
 
         <div className='flex flex-col gap-6'>
           {admin && <RefreshingProductEditor product={product} className='self-start' />}
 
           <div className='flex flex-col gap-2'>
-            <h1 className='text-3xl font-medium text-darkColor'>{product.name}</h1>
-            {product.intro && <p className='text-lg italic text-lightColor'>→ {product.intro}</p>}
+            <h1 className='text-3xl md:text-4xl font-bold tracking-tight text-darkColor'>{product.name}</h1>
+            {product.intro && <p className='text-lg italic text-brand-700'>→ {product.intro}</p>}
           </div>
 
           {(product.medium || product.dimensions) && (
@@ -65,7 +65,7 @@ const ProductPage = async ({ params }: Props) => {
           )}
 
           <div className='flex flex-col gap-1'>
-            <PriceView price={product.price} discount={product.discount} className='text-2xl' />
+            <PriceView price={product.price} discount={product.discount} className='text-3xl text-brand-700' />
             {typeof product.stock === 'number' && product.stock > 0 && product.stock <= 3 && (
               <p className='text-sm text-lightColor'>Only {product.stock} left</p>
             )}

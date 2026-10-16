@@ -12,13 +12,26 @@ export default {
     extend: {
       colors: {
         // Our colors start
-        darkColor: "#151515",
-        lightColor: "#52525b",
+        darkColor: "#0f172a",
+        lightColor: "#64748b",
         lightOrange: "#fca99b",
         lightBlue: "#7688DB",
         darkBlue: "#6c7fd8",
         darkText: "#686e7d",
-        lightBg: "#F8F8FB",
+        lightBg: "#f5f8ff",
+        // Main blue brand colour
+        brand: {
+          50: "#eff6ff",
+          100: "#dbeafe",
+          200: "#bfdbfe",
+          300: "#93c5fd",
+          500: "#3b82f6",
+          600: "#2563eb",
+          700: "#1d4ed8",
+          800: "#1e40af",
+          900: "#1e3a8a",
+          950: "#172554",
+        },
         // Our colors end
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",

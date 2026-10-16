@@ -30,7 +30,7 @@ export default async function RootLayout({
         className={`${raleway.variable}antialiased`}
       >
         {admin && (
-          <div className="bg-darkColor text-white text-xs font-semibold text-center py-1.5">
+          <div className="bg-brand-900 text-white text-xs font-semibold text-center py-1.5">
             Admin mode – use the ✎ buttons to edit the website
           </div>
         )}

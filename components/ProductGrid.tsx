@@ -13,7 +13,7 @@ import ProductEditor from './admin/ProductEditor';
 const ProductGrid = ({isAdmin = false}:{isAdmin?: boolean}) => {
   const [selectedTab, setSelectedTab] = useState(productType[0]?.title || "");
   const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [reloadCount, setReloadCount] = useState(0);
   // Match the tab's stored value, or its title (older products were saved with the title)
   const query = `*[_type == "product" && lower(variant) in [$value, $title]] { 
@@ -48,18 +48,22 @@ const ProductGrid = ({isAdmin = false}:{isAdmin?: boolean}) => {
   
    
   return (
-    <div className='mt-10 flex flex-col items-center'>
+    <section id='collections' className='mt-16 flex scroll-mt-24 flex-col items-center gap-6'>
+        <div className='flex flex-col items-center gap-2 text-center'>
+          <span className='text-xs font-semibold uppercase tracking-[0.25em] text-brand-600'>Our collections</span>
+          <h2 className='text-3xl font-bold tracking-tight text-darkColor'>Find your next favourite piece</h2>
+        </div>
         <HomeTabbar  selectedTab={selectedTab} onTabSelect={setSelectedTab} />
         {isAdmin && (
           <ProductEditor
-            className='mt-5'
+            className='bg-brand-600 hover:bg-brand-700'
             defaultVariant={productType.find((item) => item.title === selectedTab)?.value}
             onSaved={reload}
           />
         )}
         {loading ? (
-          <div className='flex flex-col items-center justify-center py-10 min-h-80 space-y-4 text-center bg-gray-100 rounded-lg w-full mt-10'>
-            <div className='flex items-center space-x-2 text-blue-600'>
+          <div className='flex flex-col items-center justify-center py-10 min-h-80 space-y-4 text-center bg-brand-50 rounded-2xl w-full mt-4'>
+            <div className='flex items-center space-x-2 text-brand-600'>
               <Loader2 className=' animate-spin'/>
             <span className='text-lg font-semibold'>Product is loading...</span>
             </div>
@@ -67,7 +71,7 @@ const ProductGrid = ({isAdmin = false}:{isAdmin?: boolean}) => {
         ) : (
           <>
           {products?.length ?(
-            <div  className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 mt-10 w-full'>
+            <div  className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-4 w-full'>
           {products?.map((product:Product)=>( <div key={product?._id}>
             <ProductCard product={product} isAdmin={isAdmin} onSaved={reload}/>
           </div>
@@ -78,7 +82,7 @@ const ProductGrid = ({isAdmin = false}:{isAdmin?: boolean}) => {
         )}
           </>
         )}
-    </div>
+    </section>
   )
 }
 

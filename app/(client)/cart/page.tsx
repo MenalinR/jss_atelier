@@ -21,7 +21,7 @@ const CartPage = () => {
       <Container className='py-20 flex flex-col items-center gap-4 text-center'>
         <h1 className='text-2xl font-semibold text-darkColor'>Your cart is empty</h1>
         <p className='text-lightColor'>Explore our collections and add the artworks you love.</p>
-        <Link href='/' className='bg-darkColor text-white px-6 py-3 text-sm font-semibold uppercase tracking-wide hover:bg-lightColor hoverEffect'>
+        <Link href='/' className='rounded-full bg-brand-600 text-white px-7 py-3 text-sm font-semibold shadow-lg shadow-brand-600/30 hover:bg-brand-700 hoverEffect'>
           Continue shopping
         </Link>
       </Container>
@@ -32,24 +32,24 @@ const CartPage = () => {
     <Container className='py-10'>
       <h1 className='text-2xl font-semibold text-darkColor mb-6'>Your cart ({getCartCount(items)})</h1>
       <div className='grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-10'>
-        <div className='flex flex-col divide-y border-y'>
+        <div className='flex flex-col divide-y divide-slate-100 rounded-2xl bg-white px-4 md:px-6 shadow-sm ring-1 ring-slate-200'>
           {items.map(({product, quantity}) => {
             const atStockLimit = typeof product.stock === 'number' && quantity >= product.stock
             return (
               <div key={product._id} className='flex gap-4 py-4'>
-                <Link href={`/product/${product.slug}`} className='relative w-24 h-24 shrink-0 bg-zinc-100'>
+                <Link href={`/product/${product.slug}`} className='relative w-24 h-24 shrink-0 overflow-hidden rounded-xl bg-brand-50'>
                   {product.image && (
                     <Image src={urlFor(product.image).width(200).height(200).url()} alt={product.name || 'Product picture'} fill className='object-cover'/>
                   )}
                 </Link>
                 <div className='flex-1 flex flex-col gap-2'>
                   <div className='flex justify-between gap-4'>
-                    <Link href={`/product/${product.slug}`} className='font-semibold text-darkColor hover:underline'>{product.name}</Link>
+                    <Link href={`/product/${product.slug}`} className='font-semibold text-darkColor hover:text-brand-700 hoverEffect'>{product.name}</Link>
                     <PriceFormatter amount={(product.price || 0) * quantity} />
                   </div>
                   <PriceFormatter amount={product.price} className='text-xs font-normal text-lightColor' />
                   <div className='flex items-center justify-between mt-auto'>
-                    <div className='flex items-center border'>
+                    <div className='flex items-center rounded-full ring-1 ring-slate-200'>
                       <button type='button' aria-label='Decrease quantity' disabled={quantity <= 1} onClick={() => setQuantity(product._id, quantity - 1)} className='p-2 disabled:opacity-30'>
                         <Minus className='w-3 h-3'/>
                       </button>
@@ -66,18 +66,18 @@ const CartPage = () => {
               </div>
             )
           })}
-          <button type='button' onClick={clearCart} className='self-start py-4 text-sm text-lightColor underline hover:text-darkColor'>
+          <button type='button' onClick={clearCart} className='self-start py-4 text-sm text-lightColor underline hover:text-brand-700'>
             Clear cart
           </button>
         </div>
 
-        <div className='flex flex-col gap-4 bg-lightBg p-6 h-fit'>
+        <div className='flex flex-col gap-4 rounded-2xl bg-white p-6 h-fit shadow-sm ring-1 ring-slate-200 lg:sticky lg:top-24'>
           <h2 className='text-lg font-semibold text-darkColor'>Order summary</h2>
           <div className='flex justify-between text-darkColor'>
             <span>Total</span>
-            <PriceFormatter amount={getCartTotal(items)} className='text-lg' />
+            <PriceFormatter amount={getCartTotal(items)} className='text-xl text-brand-700' />
           </div>
-          <Link href='/' className='w-full border border-darkColor py-3 text-center text-sm font-semibold uppercase tracking-wide hover:bg-darkColor hover:text-white hoverEffect'>
+          <Link href='/' className='w-full rounded-xl border border-brand-600 py-3 text-center text-sm font-semibold text-brand-700 hover:bg-brand-50 hoverEffect'>
             Continue shopping
           </Link>
         </div>

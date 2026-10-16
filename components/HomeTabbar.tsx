@@ -1,28 +1,30 @@
 import { productType } from '@/constants';
-import { title } from 'process';
 import React from 'react'
-import { Repeat } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface Props{
     selectedTab:string;
     onTabSelect: (tab: string) => void;
-    
+
 }
 
 const HomeTabbar = ({selectedTab,onTabSelect}:Props) => {
   return (
-    <div className='flex items-center gap-1.5 text-sm font-semibold'>
-        <div className='flex items-center gap-1.5'>
+    // Scrolls sideways on small screens instead of overflowing
+    <div className='w-full overflow-x-auto pb-2'>
+        <div className='mx-auto flex w-max items-center gap-2 rounded-full bg-white p-1.5 text-sm font-semibold shadow-sm ring-1 ring-slate-200'>
             {productType?.map((item) => (
                 <button key={item?.title}
                 onClick={() => onTabSelect(item?.title)}
-                className={`border border-darkColor px-4 py-1.5 md:px-6 md:py-2 rounded-full hover:bg-darkColor hover:text-white  ${selectedTab === item?.title && "bg-darkColor text-white"}`}
+                className={cn(
+                  'shrink-0 rounded-full px-4 py-2 md:px-5 hoverEffect',
+                  selectedTab === item?.title
+                    ? 'bg-brand-600 text-white shadow-md shadow-brand-600/30'
+                    : 'text-lightColor hover:bg-brand-50 hover:text-brand-700'
+                )}
                 >{item?.title}</button>
             ))}
         </div>
-        <button className={`border border-darkColor p-2 rounded-full hover:bg-darkColor hover:text-white `}>
-            <Repeat className='w-5 h-5' />
-        </button>
     </div>
   )
 }

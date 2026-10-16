@@ -26,14 +26,14 @@ const AddToCartButton = ({product, className}:{product: Product; className?: str
         type='button'
         onClick={handleClick}
         disabled={soldOut || atStockLimit}
-        className='w-full bg-darkColor text-white py-4 text-sm font-semibold uppercase tracking-wide hover:bg-lightColor hoverEffect disabled:bg-zinc-400 disabled:cursor-not-allowed'
+        className='w-full rounded-xl bg-brand-600 text-white py-4 text-sm font-semibold uppercase tracking-wide shadow-lg shadow-brand-600/30 hover:bg-brand-700 hoverEffect disabled:bg-slate-300 disabled:shadow-none disabled:cursor-not-allowed'
       >
         {soldOut ? 'Sold out' : atStockLimit ? 'All available pieces are in your cart' : added ? 'Added to cart ✓' : 'Add to cart'}
       </button>
       {hydrated && inCart && (
         <Link
           href='/cart'
-          className='w-full border border-darkColor py-4 text-center text-sm font-semibold uppercase tracking-wide hover:bg-darkColor hover:text-white hoverEffect'
+          className='w-full rounded-xl border border-brand-600 py-4 text-center text-sm font-semibold uppercase tracking-wide text-brand-700 hover:bg-brand-50 hoverEffect'
         >
           View cart ({inCart.quantity} in cart)
         </Link>

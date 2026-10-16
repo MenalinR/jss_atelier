@@ -16,12 +16,12 @@ const Sidebar: FC<SidebarProps> = ({isOpen,onClose}) => {
     const pathname= usePathname();
     const sidebarRef= useOutsideClick<HTMLDivElement>
     (onClose);
-  return  <div className={`fixed inset-y-0 left-0 z-50 bg-darkColor/50 shadow-xl hoverEffect cursor-auto w-full ${isOpen ? "translate-x-0" : "-translate-x-full"}`}>
+  return  <div className={`fixed inset-y-0 left-0 z-50 bg-brand-950/50 shadow-xl hoverEffect cursor-auto w-full ${isOpen ? "translate-x-0" : "-translate-x-full"}`}>
     <motion.div  initial={{opacity:0}}
     animate={{opacity:1}}
     transition={{duration:0.4, delay:0.3}}
     ref={sidebarRef}
-    className='min-w-72 max-w-96 bg-darkColor text-white/70 h-full p-10 border-r border-r-white flex flex-col gap-6'>
+    className='min-w-72 max-w-96 bg-brand-950 text-white/70 h-full p-10 border-r border-r-white/10 flex flex-col gap-6'>
         <div className='flex items-center justify-between'>
             <button onClick={onClose}>
             <Logo className='text-white'>Jss</Logo>

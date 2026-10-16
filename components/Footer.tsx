@@ -9,40 +9,48 @@ import { getSiteSettings } from '@/sanity/lib/siteSettings';
 import { isAdmin } from '@/lib/admin';
 import SiteSettingsEditor from './admin/SiteSettingsEditor';
 
+const linkClassName = 'text-slate-400 hover:text-white text-sm font-medium hoverEffect';
+
 const Footer = async () => {
   const settings = await getSiteSettings();
   const admin = await isAdmin();
   return (
-  <footer className='bg-white border-t'>
-   
+  <footer className='mt-20 bg-brand-950 text-slate-300'>
+
     <Container>
-    {admin && <div className='flex justify-end pt-4'><SiteSettingsEditor settings={settings} /></div>}
+    {admin && <div className='flex justify-end pt-6'><SiteSettingsEditor settings={settings} className='bg-white text-brand-900 hover:bg-brand-50' /></div>}
     <FooterTop settings={settings}/>
-    <div className='py-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8'>
+    <div className='py-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10'>
       <div className='space-y-4'>
-        <Logo>JSS</Logo>
-        <p className='text-gray-600 text-sm'>{settings.footerAbout}</p>
-        
+        <Logo className='text-white'>JSS</Logo>
+        <p className='text-slate-400 text-sm leading-relaxed'>{settings.footerAbout}</p>
+
       </div>
       <div>
-        <h3 className='font-semibold text-darkColor mb-4'>Quick Links</h3>
+        <h3 className='font-semibold text-white mb-4'>Quick Links</h3>
         <div className='flex flex-col gap-3'>
           {quickLinksData?.map((item) =>(
-            <Link key={item?.title} href={item?.href} className='text-gray-600 hover:text-darkColor text-sm font-medium hoverEffect'>{item?.title}</Link>
+            <Link key={item?.title} href={item?.href} className={linkClassName}>{item?.title}</Link>
           ))}
         </div>
       </div>
       <div>
-      <h3 className='font-semibold text-darkColor mb-4'>Categories</h3>
-        <div className='flex flex-col gap-2'>
+      <h3 className='font-semibold text-white mb-4'>Categories</h3>
+        <div className='flex flex-col gap-3'>
           {headerData?.map((item) =>(
-            <Link key={item?.title} href={`/category${item?.href}`} className='text-gray-600 hover:text-darkColor text-sm font-medium hoverEffect'>{item?.title}</Link>
+            <Link key={item?.title} href={`/category${item?.href}`} className={linkClassName}>{item?.title}</Link>
           ))}
         </div>
       </div>
-      <div><SocialMedia className='text-darkColor/60'
-        iconClassName='border-darkColor/60 hover:border-darkColor hover:text-darkColor'
-        tooltipClassName='bg-darkColor text-white rounded-full p-1'/></div>
+      <div>
+        <h3 className='font-semibold text-white mb-4'>Follow Us</h3>
+        <SocialMedia className='text-slate-300 flex-wrap'
+        iconClassName='border-white/20 hover:border-sky-300 hover:text-sky-300 hover:bg-white/5'
+        tooltipClassName='bg-white text-brand-900 rounded-full px-2 py-1 text-xs'/>
+      </div>
+    </div>
+    <div className='border-t border-white/10 py-6 text-center text-xs text-slate-500'>
+      © {new Date().getFullYear()} JSS Atelier. All rights reserved.
     </div>
     </Container>
   </footer>
