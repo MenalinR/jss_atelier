@@ -23,6 +23,12 @@ export const categoryType = defineType({
       type: 'text',
     }),
     defineField({
+      name: 'order',
+      title: 'Order',
+      type: 'number',
+      description: 'Lower numbers show first in the home page tabs',
+    }),
+    defineField({
       name: "image",
       title: "Category Image",
       type: "image",
@@ -31,6 +37,9 @@ export const categoryType = defineType({
       },
 
     }),
+  ],
+  orderings: [
+    {title: 'Tab order', name: 'orderAsc', by: [{field: 'order', direction: 'asc'}]},
   ],
   preview:{
     select:{

@@ -3,17 +3,17 @@ import React from 'react'
 import FooterTop from './FooterTop'
 import Logo from './Logo';
 import SocialMedia from './SocialMedia';
-import { quickLinksData, headerData } from '@/constants';
+import { quickLinksData } from '@/constants';
 import Link from 'next/link';
 import { getSiteSettings } from '@/sanity/lib/siteSettings';
 import { isAdmin } from '@/lib/admin';
+import { getCategories } from '@/sanity/lib/categories';
 import SiteSettingsEditor from './admin/SiteSettingsEditor';
 
 const linkClassName = 'text-slate-400 hover:text-white text-sm font-medium hoverEffect';
 
 const Footer = async () => {
-  const settings = await getSiteSettings();
-  const admin = await isAdmin();
+  const [settings, admin, categories] = await Promise.all([getSiteSettings(), isAdmin(), getCategories()]);
   return (
   <footer className='mt-20 bg-brand-950 text-slate-300'>
 
@@ -37,8 +37,8 @@ const Footer = async () => {
       <div>
       <h3 className='font-semibold text-white mb-4'>Categories</h3>
         <div className='flex flex-col gap-3'>
-          {headerData?.map((item) =>(
-            <Link key={item?.title} href={`/category${item?.href}`} className={linkClassName}>{item?.title}</Link>
+          {categories.map((category) =>(
+            <Link key={category._id} href={`/?category=${category.slug}#collections`} className={linkClassName}>{category.title}</Link>
           ))}
         </div>
       </div>

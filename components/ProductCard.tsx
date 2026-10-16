@@ -6,19 +6,21 @@ import Image from 'next/image'
 import { ArrowRight } from 'lucide-react'
 import PriceView from './PriceView'
 import ProductEditor from './admin/ProductEditor'
+import { CategoryItem } from '@/sanity/lib/categories'
 
 interface Props{
     product: Product;
+    categories?: CategoryItem[];
     isAdmin?: boolean;
     onSaved?: () => void;
 }
 
-const ProductCard = ({product, isAdmin = false, onSaved = () => {}}:Props) => {
+const ProductCard = ({product, categories = [], isAdmin = false, onSaved = () => {}}:Props) => {
   const href = `/product/${product?.slug?.current}`
   return (
     <div className='group flex h-full flex-col overflow-hidden rounded-2xl bg-white text-sm shadow-sm ring-1 ring-slate-200 hover:-translate-y-1 hover:shadow-xl hover:shadow-brand-600/10 hover:ring-brand-200 hoverEffect'>
         <div className='relative aspect-square overflow-hidden bg-gradient-to-br from-slate-50 to-brand-50'>
-            {isAdmin && <ProductEditor product={product} onSaved={onSaved} className='absolute top-3 right-3 z-10'/>}
+            {isAdmin && <ProductEditor product={product} categories={categories} onSaved={onSaved} className='absolute top-3 right-3 z-10'/>}
             {product?.status && (
               <span className='absolute top-3 left-3 z-10 rounded-full bg-brand-600 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-white shadow'>
                 {product.status}

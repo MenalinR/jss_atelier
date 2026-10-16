@@ -5,7 +5,7 @@ import Image from "next/image";
 import { X } from "lucide-react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { deleteProduct, saveProduct } from "@/app/actions/admin";
-import { findProductType, productType } from "@/constants";
+import { CategoryItem } from "@/sanity/lib/categories";
 import { Product } from "@/sanity.types";
 import { urlFor } from "@/sanity/lib/image";
 import { EditButton, Field, FormActions, inputClassName } from "./AdminFields";
@@ -15,14 +15,19 @@ type ProductImage = NonNullable<Product["images"]>[number];
 interface Props {
   // No product means "add a new product"
   product?: Product;
-  defaultVariant?: string;
+  categories: CategoryItem[];
+  // Pre-ticked for new products
+  defaultCategoryId?: string;
   onSaved: () => void;
   // Defaults to onSaved
   onDeleted?: () => void;
   className?: string;
 }
 
-const ProductEditor = ({ product, defaultVariant, onSaved, onDeleted, className }: Props) => {
+const ProductEditor = ({ product, categories, defaultCategoryId, onSaved, onDeleted, className }: Props) => {
+  const selectedCategoryIds = product
+    ? product.categories?.map((category) => category._ref) || []
+    : defaultCategoryId ? [defaultCategoryId] : [];
   const [open, setOpen] = useState(false);
   const [error, setError] = useState<string>();
   const [pending, startTransition] = useTransition();
@@ -161,18 +166,29 @@ const ProductEditor = ({ product, defaultVariant, onSaved, onDeleted, className 
                 </select>
               </Field>
             </div>
-            <Field label="Product type (home page tab)">
-              <select
-                name="variant"
-                defaultValue={findProductType(product?.variant)?.value || defaultVariant || ""}
-                className={inputClassName}
-              >
-                <option value="">None</option>
-                {productType.map((item) => (
-                  <option key={item.value} value={item.value}>{item.title}</option>
+            <fieldset className="flex flex-col gap-2">
+              <legend className="mb-1 text-sm font-medium text-darkColor">Categories (home page tabs)</legend>
+              {!categories.length && (
+                <p className="text-xs text-lightColor">No categories yet. Use &quot;Manage categories&quot; to add some.</p>
+              )}
+              <div className="flex flex-wrap gap-2">
+                {categories.map((category) => (
+                  <label
+                    key={category._id}
+                    className="flex cursor-pointer items-center gap-2 rounded-full px-3 py-1.5 text-sm ring-1 ring-slate-200 has-[:checked]:bg-brand-50 has-[:checked]:text-brand-700 has-[:checked]:ring-brand-300"
+                  >
+                    <input
+                      type="checkbox"
+                      name="categories"
+                      value={category._id}
+                      defaultChecked={selectedCategoryIds.includes(category._id)}
+                      className="accent-brand-600"
+                    />
+                    {category.title}
+                  </label>
                 ))}
-              </select>
-            </Field>
+              </div>
+            </fieldset>
 
             <FormActions pending={pending} error={error}>
               {product && (

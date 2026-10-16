@@ -115,6 +115,7 @@ export type Category = {
   title?: string;
   slug?: Slug;
   description?: string;
+  order?: number;
   image?: {
     asset?: {
       _ref: string;

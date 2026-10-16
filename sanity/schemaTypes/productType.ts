@@ -1,6 +1,5 @@
 // import { TrolleyIcon } from "@sanity/icons";
 import { defineField, defineType } from "sanity";
-import { productType as productTypes } from "../../constants";
 
 export const productType = defineType({
     name: "product",
@@ -67,7 +66,7 @@ export const productType = defineType({
         }),
         defineField({
             name: "categories",
-            title: "Categories Price",
+            title: "Categories",
             type: "array",
             of:[{type:"reference", to:{type:"category"}}],
         }),
@@ -91,13 +90,11 @@ export const productType = defineType({
             
         }),
         defineField({
+            // Old single "type" label, replaced by Categories. Kept hidden so old data isn't lost.
             name: "variant",
-            title: "Product Type",
+            title: "Product Type (old)",
             type: "string",
-            options:{
-               // Same list as the home page tabs
-               list: productTypes,
-            },
+            hidden: true,
             
         }),
 

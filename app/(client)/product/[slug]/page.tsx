@@ -9,7 +9,7 @@ import AddToCartButton from '@/components/AddToCartButton'
 import RefreshingProductEditor from '@/components/admin/RefreshingProductEditor'
 import { client } from '@/sanity/lib/client'
 import { Product } from '@/sanity.types'
-import { findProductType } from '@/constants'
+import { getCategories } from '@/sanity/lib/categories'
 import { isAdmin } from '@/lib/admin'
 
 const getProduct = (slug: string) =>
@@ -34,14 +34,14 @@ const ProductPage = async ({ params }: Props) => {
   const product = await getProduct((await params).slug)
   if (!product) notFound()
 
-  const admin = await isAdmin()
-  const type = findProductType(product.variant)
+  const [admin, categories] = await Promise.all([isAdmin(), getCategories()])
+  const category = categories.find((item) => product.categories?.some((ref) => ref._ref === item._id))
 
   return (
     <Container className='py-8'>
       <nav className='flex flex-wrap items-center gap-2 text-sm text-lightColor mb-6'>
         <Link href='/' className='hover:text-brand-600 hoverEffect'>All Artworks</Link>
-        {type && (<><span>/</span><span>{type.title}</span></>)}
+        {category && (<><span>/</span><Link href={`/?category=${category.slug}#collections`} className='hover:text-brand-600 hoverEffect'>{category.title}</Link></>)}
         <span>/</span>
         <span className='text-darkColor'>{product.name}</span>
       </nav>
@@ -50,7 +50,7 @@ const ProductPage = async ({ params }: Props) => {
         <ProductGallery images={product.images} name={product.name} />
 
         <div className='flex flex-col gap-6'>
-          {admin && <RefreshingProductEditor product={product} className='self-start' />}
+          {admin && <RefreshingProductEditor product={product} categories={categories} className='self-start' />}
 
           <div className='flex flex-col gap-2'>
             <h1 className='text-3xl md:text-4xl font-bold tracking-tight text-darkColor'>{product.name}</h1>
