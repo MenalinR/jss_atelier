@@ -71,7 +71,13 @@ const ProductPage = async ({ params }: Props) => {
             )}
           </div>
 
-          <AddToCartButton product={product} />
+          {admin ? (
+            <p className='rounded-xl bg-brand-50 px-4 py-3 text-sm text-brand-800 ring-1 ring-brand-200'>
+              Customers see the <span className='font-semibold'>Add to cart</span> button here. It&apos;s hidden while you&apos;re logged in as admin.
+            </p>
+          ) : (
+            <AddToCartButton product={product} />
+          )}
 
           {product.description && (
             <div className='border-t pt-6'>

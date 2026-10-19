@@ -9,10 +9,13 @@ import { currentUser } from "@clerk/nextjs/server";
 import { ClerkLoaded, SignedIn, SignInButton, UserButton } from "@clerk/nextjs";
 import Link from "next/link";
 import { ListOrdered } from "lucide-react";
+import { isAdmin } from "@/lib/admin";
 
 
 const Header = async()=>{
     const user= await currentUser();
+    // The admin manages the shop, so the shopping icons are hidden for them
+    const admin = await isAdmin();
     return (
     <header className="sticky top-0 z-40 border-b border-slate-200/80 bg-white/80 backdrop-blur-md py-4">
         <Container  className="flex items-center justify-between gap-7 text-lightColor">
@@ -23,14 +26,14 @@ const Header = async()=>{
         </div>
         <div className="w-auto md:w-1/3 flex items-center justify-end gap-5">
            <SearchBar/>
-           <CartIcon/>
+           {!admin && <CartIcon/>}
           <ClerkLoaded>
             <SignedIn>
-            <Link href={"/cart"} className='group relative'>
+            {!admin && (
+            <Link href={"/orders"} className='group relative' aria-label='My orders'>
             <ListOrdered className='w-5 h-5 group-hover:text-brand-600 hoverEffect'/>
-            <span className='absolute -top-1 -right-1 bg-brand-600 text-white h-3.5 w-3.5 rounded-full text-xs font-semibold flex items-center justify-center'>
-            0</span>
             </Link>
+            )}
             <UserButton/>
             </SignedIn>
           {!user && (
