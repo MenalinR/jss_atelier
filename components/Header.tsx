@@ -29,11 +29,10 @@ const Header = async()=>{
            {!admin && <CartIcon/>}
           <ClerkLoaded>
             <SignedIn>
-            {!admin && (
-            <Link href={"/orders"} className='group relative' aria-label='My orders'>
+            {/* Customers see their own orders; the admin sees every order */}
+            <Link href={admin ? "/admin/orders" : "/orders"} className='group relative' aria-label={admin ? 'All orders' : 'My orders'}>
             <ListOrdered className='w-5 h-5 group-hover:text-brand-600 hoverEffect'/>
             </Link>
-            )}
             <UserButton/>
             </SignedIn>
           {!user && (

@@ -77,9 +77,13 @@ const CartView = () => {
             <span>Total</span>
             <PriceFormatter amount={getCartTotal(items)} className='text-xl text-brand-700' />
           </div>
+          <Link href='/checkout' className='w-full rounded-xl bg-brand-600 py-4 text-center text-sm font-semibold uppercase tracking-wide text-white shadow-lg shadow-brand-600/30 hover:bg-brand-700 hoverEffect'>
+            Proceed to checkout
+          </Link>
           <Link href='/' className='w-full rounded-xl border border-brand-600 py-3 text-center text-sm font-semibold text-brand-700 hover:bg-brand-50 hoverEffect'>
             Continue shopping
           </Link>
+          <p className='text-center text-xs text-lightColor'>No payment now – we&apos;ll contact you to confirm your order.</p>
         </div>
       </div>
     </Container>
