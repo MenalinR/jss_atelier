@@ -77,6 +77,13 @@ export const productType = defineType({
             validation: (Rule) => Rule.min(0),
         }),
         defineField({
+            name: "featured",
+            title: "Featured",
+            type: "boolean",
+            description: "Show this product on the Featured page",
+            initialValue: false,
+        }),
+        defineField({
             name: "status",
             title: "Product Status",
             type: "string",

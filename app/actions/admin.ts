@@ -145,11 +145,16 @@ export const saveProduct = async (formData: FormData) =>
         _key: randomKey(),
       })),
       status: productStatuses.includes(status) ? status : undefined,
+      featured: formData.get("featured") === "on",
       images: [...keptImages, ...newImages],
     };
 
     if (id) {
-      await writeClient.patch(id).set(values).commit();
+      // Fields left empty are removed, so "None" / blank really clears them
+      const emptyFields = Object.entries(values)
+        .filter(([, value]) => value === undefined)
+        .map(([key]) => key);
+      await writeClient.patch(id).set(values).unset(emptyFields).commit();
     } else {
       await writeClient.create({
         _type: "product",

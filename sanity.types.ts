@@ -102,6 +102,7 @@ export type Product = {
     [internalGroqTypeReferenceTo]?: "category";
   }>;
   stock?: number;
+  featured?: boolean;
   status?: "new" | "hot" | "sale";
   variant?: string;
 };

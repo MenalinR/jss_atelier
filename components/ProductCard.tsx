@@ -21,11 +21,18 @@ const ProductCard = ({product, categories = [], isAdmin = false, onSaved = () =>
     <div className='group flex h-full flex-col overflow-hidden rounded-2xl bg-white text-sm shadow-sm ring-1 ring-slate-200 hover:-translate-y-1 hover:shadow-xl hover:shadow-brand-600/10 hover:ring-brand-200 hoverEffect'>
         <div className='relative aspect-square overflow-hidden bg-gradient-to-br from-slate-50 to-brand-50'>
             {isAdmin && <ProductEditor product={product} categories={categories} onSaved={onSaved} className='absolute top-3 right-3 z-10'/>}
-            {product?.status && (
-              <span className='absolute top-3 left-3 z-10 rounded-full bg-brand-600 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-white shadow'>
-                {product.status}
-              </span>
-            )}
+            <div className='absolute top-3 left-3 z-10 flex flex-col items-start gap-1.5'>
+              {product?.status && (
+                <span className='rounded-full bg-brand-600 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-white shadow'>
+                  {product.status}
+                </span>
+              )}
+              {!!product?.discount && product.discount > 0 && (
+                <span className='rounded-full bg-rose-500 px-2.5 py-1 text-[11px] font-bold text-white shadow'>
+                  -{product.discount}%
+                </span>
+              )}
+            </div>
             {product?.images?.length ? <Link href={href}>
             <Image src={urlFor(product?.images[0]).width(600).url()}
             width={600}

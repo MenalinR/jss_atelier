@@ -166,6 +166,10 @@ const ProductEditor = ({ product, categories, defaultCategoryId, onSaved, onDele
                 </select>
               </Field>
             </div>
+            <label className="flex cursor-pointer items-center gap-2 rounded-xl bg-amber-50 px-3 py-2.5 text-sm font-medium text-darkColor ring-1 ring-amber-200">
+              <input type="checkbox" name="featured" defaultChecked={product?.featured} className="h-4 w-4 accent-brand-600" />
+              ⭐ Featured – show on the Featured page
+            </label>
             <fieldset className="flex flex-col gap-2">
               <legend className="mb-1 text-sm font-medium text-darkColor">Categories (home page tabs)</legend>
               {!categories.length && (
