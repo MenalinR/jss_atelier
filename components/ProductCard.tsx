@@ -4,9 +4,18 @@ import Link from 'next/link'
 import { urlFor } from '@/sanity/lib/image'
 import Image from 'next/image'
 import { ArrowRight } from 'lucide-react'
+import { cn } from '@/lib/utils'
 import PriceView from './PriceView'
 import ProductEditor from './admin/ProductEditor'
 import { CategoryItem } from '@/sanity/lib/categories'
+
+// Stock label and colour; no label when the admin hasn't set a stock number
+const getStockLabel = (stock?: number) => {
+  if (typeof stock !== 'number') return null
+  if (stock <= 0) return { text: 'Sold out', className: 'bg-slate-100 text-slate-500' }
+  if (stock <= 3) return { text: `Only ${stock} left`, className: 'bg-amber-50 text-amber-700' }
+  return { text: `${stock} in stock`, className: 'bg-emerald-50 text-emerald-700' }
+}
 
 interface Props{
     product: Product;
@@ -17,6 +26,7 @@ interface Props{
 
 const ProductCard = ({product, categories = [], isAdmin = false, onSaved = () => {}}:Props) => {
   const href = `/product/${product?.slug?.current}`
+  const stock = getStockLabel(product?.stock)
   return (
     <div className='group flex h-full flex-col overflow-hidden rounded-2xl bg-white text-sm shadow-sm ring-1 ring-slate-200 hover:-translate-y-1 hover:shadow-xl hover:shadow-brand-600/10 hover:ring-brand-200 hoverEffect'>
         <div className='relative aspect-square overflow-hidden bg-gradient-to-br from-slate-50 to-brand-50'>
@@ -46,6 +56,12 @@ const ProductCard = ({product, categories = [], isAdmin = false, onSaved = () =>
         <div className='flex flex-1 flex-col gap-1.5 p-4'>
             <Link href={href}><h2 className='text-base font-semibold text-darkColor line-clamp-1 group-hover:text-brand-700 hoverEffect'>{product?.name}</h2></Link>
             {product?.intro && <p className='text-lightColor line-clamp-2'>{product.intro}</p>}
+            {stock && (
+              <span className={cn('mt-1 inline-flex w-fit items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold', stock.className)}>
+                <span className='h-1.5 w-1.5 rounded-full bg-current'/>
+                {stock.text}
+              </span>
+            )}
             <div className='mt-auto flex items-center justify-between gap-2 pt-3'>
               <PriceView
               className='text-base text-brand-700'
