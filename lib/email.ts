@@ -142,7 +142,7 @@ export const sendOrderPlacedEmails = async (order: EmailOrder, contact: { phone:
           📍 ${escapeHtml(order.address).replace(/\n/g, "<br>")}, ${escapeHtml(order.city)}</p>
           ${order.note ? `<p style="background:#fffbeb;border-radius:8px;padding:10px 12px;color:#78350f">📝 ${escapeHtml(order.note)}</p>` : ""}
           ${itemsTable(order)}
-          <p><a href="${siteUrl()}/admin/orders" style="display:inline-block;background:#2563eb;color:#ffffff;text-decoration:none;padding:12px 20px;border-radius:10px;font-weight:bold">Open orders</a></p>`
+          <p><a href="${siteUrl()}/admin/orders?status=new" style="display:inline-block;background:#2563eb;color:#ffffff;text-decoration:none;padding:12px 20px;border-radius:10px;font-weight:bold">Open orders</a></p>`
         ),
         order.email || undefined
       )

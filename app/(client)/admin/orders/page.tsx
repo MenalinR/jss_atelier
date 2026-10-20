@@ -2,6 +2,7 @@ import React from 'react'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
+import { auth } from '@clerk/nextjs/server'
 import { Inbox, Mail, MapPin, MessageSquare, Phone } from 'lucide-react'
 import Container from '@/components/Container'
 import PriceFormatter from '@/components/PriceFormatter'
@@ -105,8 +106,12 @@ const OrderRow = ({ order }: { order: Order }) => (
 type Props = { searchParams: Promise<{ status?: string }> }
 
 const AdminOrdersPage = async ({ searchParams }: Props) => {
+  const { userId, redirectToSignIn } = await auth()
+  const { status } = await searchParams
+  // From the "Open orders" email button: ask to log in first, then come back here
+  if (!userId) return redirectToSignIn({ returnBackUrl: `/admin/orders${status ? `?status=${status}` : ''}` })
   if (!(await isAdmin())) notFound()
-  const [orders, { status }] = await Promise.all([getAllOrders(), searchParams])
+  const orders = await getAllOrders()
   const activeTab = tabs.find((tab) => tab.status === status)?.status || 'all'
   const shown = activeTab === 'all' ? orders : orders.filter((order) => order.status === activeTab)
   const count = (tabStatus: string) =>
