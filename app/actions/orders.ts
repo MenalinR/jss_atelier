@@ -1,10 +1,13 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { after } from "next/server";
 import { currentUser } from "@clerk/nextjs/server";
 import { isAdmin } from "@/lib/admin";
 import { ORDER_ID_PREFIX, OrderStatus } from "@/lib/orders";
 import { writeClient } from "@/sanity/lib/writeClient";
+import { getSiteSettings } from "@/sanity/lib/siteSettings";
+import { sendOrderPlacedEmails, sendOrderStatusEmail, statusEmailsFor } from "@/lib/email";
 
 export interface PlaceOrderInput {
   customerName: string;
@@ -132,23 +135,46 @@ export const placeOrder = async (input: PlaceOrderInput): Promise<PlaceOrderResu
     return { ok: false, error: "Someone else just ordered one of these pieces. Please check your cart and try again." };
   }
 
+  // Send the confirmation emails after responding, so the customer isn't kept waiting
+  after(async () => {
+    const settings = await getSiteSettings();
+    await sendOrderPlacedEmails(
+      { orderNumber, ...details, items, total },
+      { phone: settings.phone, email: settings.email }
+    );
+  });
+
   revalidatePath("/", "layout");
   return { ok: true, orderNumber };
 };
 
-export const updateOrderStatus = async (orderId: string, status: OrderStatus) => {
+export const updateOrderStatus = async (
+  orderId: string,
+  status: OrderStatus
+): Promise<{ ok: boolean; error?: string; emailed?: boolean }> => {
   if (!(await isAdmin())) return { ok: false, error: "Only admins can change orders." };
   if (!orderId.startsWith(ORDER_ID_PREFIX)) return { ok: false, error: "Unknown order." };
   const allowed: OrderStatus[] = ["new", "confirmed", "shipped", "completed", "cancelled"];
   if (!allowed.includes(status)) return { ok: false, error: "Unknown status." };
 
   try {
-    const order = await writeClient.fetch<{ status: OrderStatus; items: { product?: { _ref: string }; quantity: number }[] } | null>(
-      `*[_id == $orderId][0]{ status, items[]{ product, quantity } }`,
+    const order = await writeClient.fetch<{
+      status: OrderStatus;
+      orderNumber: string;
+      customerName: string;
+      phone: string;
+      email?: string;
+      address: string;
+      city: string;
+      total: number;
+      items: { product?: { _ref: string }; name: string; price: number; quantity: number }[];
+    } | null>(
+      `*[_id == $orderId][0]{ status, orderNumber, customerName, phone, email, address, city, total, items[]{ product, name, price, quantity } }`,
       { orderId }
     );
     if (!order) return { ok: false, error: "This order no longer exists." };
     if (order.status === "cancelled") return { ok: false, error: "Cancelled orders can't be changed." };
+    if (order.status === status) return { ok: true };
 
     const transaction = writeClient.transaction().patch(orderId, { set: { status } });
     if (status === "cancelled") {
@@ -166,7 +192,14 @@ export const updateOrderStatus = async (orderId: string, status: OrderStatus) =>
     }
     await transaction.commit();
     revalidatePath("/", "layout");
-    return { ok: true };
+
+    // Let the customer know (confirmed / shipped / cancelled)
+    let emailed = false;
+    if (statusEmailsFor.includes(status) && order.email) {
+      const settings = await getSiteSettings();
+      emailed = await sendOrderStatusEmail(order, status, { phone: settings.phone, email: settings.email });
+    }
+    return { ok: true, emailed };
   } catch (error) {
     console.error("Update order Error", error);
     return { ok: false, error: "Could not update the order. Please try again." };

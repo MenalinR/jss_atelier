@@ -92,7 +92,7 @@ const CheckoutView = ({defaultName = '', defaultEmail = ''}:{defaultName?: strin
             {field('customerName', 'Full name *', <input name='customerName' required autoComplete='name' defaultValue={defaultName} className={cn(inputClassName, errorRing('customerName'))} />)}
             {field('phone', 'Phone number *', <input name='phone' type='tel' required autoComplete='tel' placeholder='07X XXX XXXX' className={cn(inputClassName, errorRing('phone'))} />)}
           </div>
-          {field('email', 'Email (optional)', <input name='email' type='email' autoComplete='email' defaultValue={defaultEmail} className={cn(inputClassName, errorRing('email'))} />)}
+          {field('email', 'Email (optional – for your order confirmation)', <input name='email' type='email' autoComplete='email' defaultValue={defaultEmail} className={cn(inputClassName, errorRing('email'))} />)}
 
           <h2 className='mt-2 text-lg font-semibold text-darkColor'>Delivery address</h2>
           {field('address', 'Address *', <textarea name='address' required rows={3} autoComplete='street-address' className={cn(inputClassName, errorRing('address'))} />)}

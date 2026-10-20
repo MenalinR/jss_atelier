@@ -7,6 +7,7 @@ import OrderCard, { statusStyles } from '@/components/OrderCard'
 import OrderStatusSelect from '@/components/admin/OrderStatusSelect'
 import { getAllOrders } from '@/lib/orders'
 import { isAdmin } from '@/lib/admin'
+import { emailIsConfigured } from '@/lib/email'
 import { cn } from '@/lib/utils'
 
 export const metadata: Metadata = { title: 'Orders | JSS Admin' }
@@ -29,6 +30,12 @@ const AdminOrdersPage = async () => {
           ))}
         </div>
       </div>
+
+      {!emailIsConfigured() && (
+        <p className='rounded-xl bg-amber-50 px-4 py-3 text-sm text-amber-900 ring-1 ring-amber-200'>
+          ✉️ Order emails are turned off. Add the SMTP settings to <code>.env.local</code> so you and your customers get order emails.
+        </p>
+      )}
 
       {orders.length ? (
         <div className='grid grid-cols-1 lg:grid-cols-2 gap-6'>

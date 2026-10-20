@@ -12,6 +12,7 @@ const statuses: OrderStatus[] = ["new", "confirmed", "shipped", "completed", "ca
 const OrderStatusSelect = ({ orderId, status }: { orderId: string; status: OrderStatus }) => {
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<string>();
+  const [notice, setNotice] = useState<string>();
   const router = useRouter();
 
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -21,9 +22,11 @@ const OrderStatusSelect = ({ orderId, status }: { orderId: string; status: Order
       return;
     }
     setError(undefined);
+    setNotice(undefined);
     startTransition(async () => {
       const result = await updateOrderStatus(orderId, next);
       if (!result.ok) setError(result.error);
+      else if (result.emailed) setNotice("✉️ Customer emailed");
       router.refresh();
     });
   };
@@ -40,7 +43,9 @@ const OrderStatusSelect = ({ orderId, status }: { orderId: string; status: Order
       >
         {statuses.map((item) => <option key={item} value={item}>{item}</option>)}
       </select>
+      {pending && <span className="text-xs text-lightColor">Saving…</span>}
       {error && <span className="text-xs text-red-600">{error}</span>}
+      {notice && <span className="text-xs text-emerald-600">{notice}</span>}
     </div>
   );
 };
