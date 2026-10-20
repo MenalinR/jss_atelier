@@ -12,6 +12,7 @@ import { getAllOrders, Order } from '@/lib/orders'
 import { isAdmin } from '@/lib/admin'
 import { emailIsConfigured } from '@/lib/email'
 import { cn } from '@/lib/utils'
+import { paymentMethodTitle } from '@/lib/payment'
 
 export const metadata: Metadata = { title: 'Orders | JSS Admin' }
 
@@ -53,6 +54,13 @@ const OrderRow = ({ order }: { order: Order }) => (
       <div className='flex flex-col items-start gap-1'>
         <span className={sectionLabel}>Status</span>
         <OrderStatusSelect orderId={order._id} status={order.status} />
+      </div>
+      <div className='flex flex-col items-start gap-1'>
+        <span className={sectionLabel}>Payment</span>
+        <span className='rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-darkColor'>
+          {order.paymentMethod === 'bank_transfer' ? '🏦 ' : order.paymentMethod === 'cod' ? '💵 ' : ''}
+          {paymentMethodTitle(order.paymentMethod)}
+        </span>
       </div>
     </div>
 

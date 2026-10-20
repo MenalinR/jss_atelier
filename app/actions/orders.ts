@@ -5,6 +5,7 @@ import { after } from "next/server";
 import { currentUser } from "@clerk/nextjs/server";
 import { isAdmin } from "@/lib/admin";
 import { ORDER_ID_PREFIX, OrderStatus } from "@/lib/orders";
+import { paymentMethods, PaymentMethod } from "@/lib/payment";
 import { writeClient } from "@/sanity/lib/writeClient";
 import { getSiteSettings } from "@/sanity/lib/siteSettings";
 import { sendOrderPlacedEmails, sendOrderStatusEmail, statusEmailsFor } from "@/lib/email";
@@ -16,6 +17,7 @@ export interface PlaceOrderInput {
   address: string;
   city: string;
   note: string;
+  paymentMethod: PaymentMethod;
   // Spam trap: a hidden field real people leave empty
   website: string;
   items: { productId: string; quantity: number }[];
@@ -66,6 +68,8 @@ export const placeOrder = async (input: PlaceOrderInput): Promise<PlaceOrderResu
   if (details.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(details.email)) fieldErrors.email = "Please enter a valid email, or leave it empty.";
   if (details.address.length < 5) fieldErrors.address = "Please enter your delivery address.";
   if (details.city.length < 2) fieldErrors.city = "Please enter your city.";
+  const paymentMethod = paymentMethods.find((method) => method.value === input.paymentMethod)?.value;
+  if (!paymentMethod) fieldErrors.paymentMethod = "Please choose how you'd like to pay.";
   if (Object.keys(fieldErrors).length) return { ok: false, error: "Please check the highlighted fields.", fieldErrors };
 
   // Merge duplicate lines and ignore anything odd
@@ -115,6 +119,7 @@ export const placeOrder = async (input: PlaceOrderInput): Promise<PlaceOrderResu
     _type: "order",
     orderNumber,
     status: "new",
+    paymentMethod,
     ...details,
     items,
     total,
@@ -139,8 +144,8 @@ export const placeOrder = async (input: PlaceOrderInput): Promise<PlaceOrderResu
   after(async () => {
     const settings = await getSiteSettings();
     await sendOrderPlacedEmails(
-      { orderNumber, ...details, items, total },
-      { phone: settings.phone, email: settings.email }
+      { orderNumber, ...details, paymentMethod, items, total },
+      { phone: settings.phone, email: settings.email, bankDetails: settings.bankDetails }
     );
   });
 

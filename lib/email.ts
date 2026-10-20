@@ -1,5 +1,6 @@
 import "server-only";
 import nodemailer from "nodemailer";
+import { paymentMethodTitle } from "./payment";
 
 // Emails are sent through any SMTP account (e.g. Gmail with an App Password).
 // If SMTP isn't set up, emails are skipped and orders still work.
@@ -12,6 +13,7 @@ export interface EmailOrder {
   address: string;
   city: string;
   note?: string;
+  paymentMethod?: string;
   items: { name: string; price: number; quantity: number }[];
   total: number;
 }
@@ -102,10 +104,35 @@ const itemsTable = (order: EmailOrder) => `
 const orderBadge = (orderNumber: string) =>
   `<p style="display:inline-block;background:#eff6ff;color:#1e40af;border:1px solid #bfdbfe;border-radius:999px;padding:6px 14px;font-weight:bold">Order ${escapeHtml(orderNumber)}</p>`;
 
+// What the customer should do to pay
+const paymentBlock = (order: EmailOrder, bankDetails = "") => {
+  if (order.paymentMethod === "bank_transfer") {
+    return `<div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;padding:12px 14px;margin:16px 0">
+      <p style="margin:0 0 6px"><strong>Payment: Bank Transfer</strong></p>
+      ${
+        bankDetails
+          ? `<p style="margin:0 0 6px">Please transfer <strong>${formatPrice(order.total)}</strong> to:</p>
+             <p style="margin:0 0 6px;font-family:monospace">${escapeHtml(bankDetails).replace(/\n/g, "<br>")}</p>
+             <p style="margin:0">Use <strong>${escapeHtml(order.orderNumber)}</strong> as the payment reference.</p>`
+          : `<p style="margin:0">We'll send you our bank details when we contact you.</p>`
+      }
+    </div>`;
+  }
+  if (order.paymentMethod === "cod") {
+    return `<div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;padding:12px 14px;margin:16px 0">
+      <p style="margin:0"><strong>Payment: Cash on Delivery</strong> – please have <strong>${formatPrice(order.total)}</strong> ready when your artwork arrives.</p>
+    </div>`;
+  }
+  return "";
+};
+
 const deliveryBlock = (order: EmailOrder) => `
 <p style="margin:0"><strong>Delivery to:</strong><br>${escapeHtml(order.customerName)}<br>${escapeHtml(order.address).replace(/\n/g, "<br>")}, ${escapeHtml(order.city)}<br>${escapeHtml(order.phone)}</p>`;
 
-export const sendOrderPlacedEmails = async (order: EmailOrder, contact: { phone: string; email: string }) => {
+export const sendOrderPlacedEmails = async (
+  order: EmailOrder,
+  contact: { phone: string; email: string; bankDetails?: string }
+) => {
   const tasks: Promise<boolean>[] = [];
 
   if (order.email) {
@@ -116,9 +143,10 @@ export const sendOrderPlacedEmails = async (order: EmailOrder, contact: { phone:
         layout(
           "Thank you for your order!",
           `<p>Hi ${escapeHtml(order.customerName)},</p>
-          <p>We've received your order. We'll contact you soon by phone to confirm it and arrange payment and delivery. You don't need to pay anything yet.</p>
+          <p>We've received your order. We'll contact you soon by phone to confirm it and arrange delivery.</p>
           ${orderBadge(order.orderNumber)}
           ${itemsTable(order)}
+          ${paymentBlock(order, contact.bankDetails)}
           ${deliveryBlock(order)}
           <p style="margin-top:20px">Questions? Call us on <strong>${escapeHtml(contact.phone)}</strong> or reply to this email.</p>`
         ),
@@ -142,6 +170,7 @@ export const sendOrderPlacedEmails = async (order: EmailOrder, contact: { phone:
           📍 ${escapeHtml(order.address).replace(/\n/g, "<br>")}, ${escapeHtml(order.city)}</p>
           ${order.note ? `<p style="background:#fffbeb;border-radius:8px;padding:10px 12px;color:#78350f">📝 ${escapeHtml(order.note)}</p>` : ""}
           ${itemsTable(order)}
+          <p style="margin:0 0 16px"><strong>Payment:</strong> ${paymentMethodTitle(order.paymentMethod)}</p>
           <p><a href="${siteUrl()}/admin/orders?status=new" style="display:inline-block;background:#2563eb;color:#ffffff;text-decoration:none;padding:12px 20px;border-radius:10px;font-weight:bold">Open orders</a></p>`
         ),
         order.email || undefined

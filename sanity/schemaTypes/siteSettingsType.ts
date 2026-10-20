@@ -44,6 +44,12 @@ export const siteSettingsType = defineType({
             title: "Email",
             type: "string",
         }),
+        defineField({
+            name: "bankDetails",
+            title: "Bank Details (for Bank Transfer orders)",
+            type: "text",
+            rows: 5,
+        }),
     ],
     preview: {
         prepare() {

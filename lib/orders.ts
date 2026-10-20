@@ -17,6 +17,7 @@ export interface Order {
   _createdAt: string;
   orderNumber: string;
   status: OrderStatus;
+  paymentMethod?: string;
   customerName: string;
   phone: string;
   email?: string;
@@ -31,7 +32,7 @@ export interface Order {
 // Sanity keeps those private: only requests with the secret token can read them.
 export const ORDER_ID_PREFIX = "orders.";
 
-const orderFields = `_id, _createdAt, orderNumber, status, customerName, phone, email, address, city, note, total,
+const orderFields = `_id, _createdAt, orderNumber, status, paymentMethod, customerName, phone, email, address, city, note, total,
   items[]{ _key, product, name, price, quantity, "slug": product->slug.current }`;
 
 export const getAllOrders = () =>

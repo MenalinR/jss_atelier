@@ -8,6 +8,7 @@ export interface SiteSettings {
   phone: string
   businessHours: string
   email: string
+  bankDetails: string
 }
 
 // Shown until the admin fills in Site Settings in the Studio
@@ -21,6 +22,8 @@ const defaultSettings: SiteSettings = {
   phone: '0761111111',
   businessHours: 'Mon- Sat: 9:00 AM - 7:00 PM',
   email: 'jss09@gmail.com',
+  // Empty until the admin adds them
+  bankDetails: '',
 }
 
 export const getSiteSettings = async (): Promise<SiteSettings> => {

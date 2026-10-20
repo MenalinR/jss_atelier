@@ -58,6 +58,7 @@ export const updateSiteSettings = async (formData: FormData) =>
       "phone",
       "businessHours",
       "email",
+      "bankDetails",
     ];
     const values = Object.fromEntries(fields.map((field) => [field, text(formData, field)]));
 

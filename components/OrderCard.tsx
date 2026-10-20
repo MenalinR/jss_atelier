@@ -3,6 +3,7 @@ import Link from 'next/link'
 import type { Order } from '@/lib/orders'
 import PriceFormatter from './PriceFormatter'
 import { cn } from '@/lib/utils'
+import { paymentMethodTitle } from '@/lib/payment'
 
 export const statusStyles: Record<string, string> = {
   new: 'bg-brand-50 text-brand-700 ring-brand-200',
@@ -38,9 +39,12 @@ const OrderCard = ({order, children, statusSlot}:{order: Order; children?: React
       ))}
     </div>
     {children}
-    <div className='flex justify-end gap-2 text-darkColor'>
+    <div className='flex items-center justify-between gap-2 text-darkColor'>
+      <span className='text-xs text-lightColor'>Payment: {paymentMethodTitle(order.paymentMethod)}</span>
+      <span className='flex items-center gap-2'>
       <span className='font-semibold'>Total</span>
       <PriceFormatter amount={order.total} className='text-base text-brand-700'/>
+      </span>
     </div>
   </div>
 )

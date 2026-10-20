@@ -83,7 +83,7 @@ const CartView = () => {
           <Link href='/' className='w-full rounded-xl border border-brand-600 py-3 text-center text-sm font-semibold text-brand-700 hover:bg-brand-50 hoverEffect'>
             Continue shopping
           </Link>
-          <p className='text-center text-xs text-lightColor'>No payment now – we&apos;ll contact you to confirm your order.</p>
+          <p className='text-center text-xs text-lightColor'>Pay by cash on delivery or bank transfer.</p>
         </div>
       </div>
     </Container>

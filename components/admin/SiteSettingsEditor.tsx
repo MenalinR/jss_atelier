@@ -56,6 +56,15 @@ const SiteSettingsEditor = ({ settings, className }: { settings: SiteSettings; c
             <Field label="Email">
               <input name="email" type="email" defaultValue={settings.email} className={inputClassName} />
             </Field>
+            <Field label="Bank details (shown to Bank Transfer customers)">
+              <textarea
+                name="bankDetails"
+                rows={5}
+                defaultValue={settings.bankDetails}
+                placeholder={"Bank: Commercial Bank\nBranch: Nugegoda\nAccount name: JSS Atelier\nAccount number: 1234567890"}
+                className={inputClassName}
+              />
+            </Field>
             <FormActions pending={pending} error={error} />
           </form>
         </DialogContent>

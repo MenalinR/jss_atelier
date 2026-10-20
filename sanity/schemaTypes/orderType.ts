@@ -23,6 +23,17 @@ export const orderType = defineType({
             options: { list: orderStatuses },
             initialValue: "new",
         }),
+        defineField({
+            name: "paymentMethod",
+            title: "Payment Method",
+            type: "string",
+            options: {
+                list: [
+                    { title: "Cash on Delivery", value: "cod" },
+                    { title: "Bank Transfer", value: "bank_transfer" },
+                ],
+            },
+        }),
         defineField({ name: "customerName", title: "Customer Name", type: "string" }),
         defineField({ name: "phone", title: "Phone", type: "string" }),
         defineField({ name: "email", title: "Email", type: "string" }),
