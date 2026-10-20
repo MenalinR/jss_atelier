@@ -32,7 +32,7 @@ const OrderStatusSelect = ({ orderId, status }: { orderId: string; status: Order
   };
 
   return (
-    <div className="flex flex-col items-end gap-1">
+    <div className="flex flex-col items-start gap-1">
       <select
         aria-label="Order status"
         defaultValue={status}

@@ -6,13 +6,11 @@ interface Props{
     className?: string;
 }
 const PriceFormatter = ({amount,className}:Props) => {
-  const formattedPrice= new Number(amount).toLocaleString("si-LK",
-    {
-        currency:"LKR",
-        style:"currency",
-        minimumFractionDigits:2,
-    }
-  )
+  // Always "LKR 1,000.00", whatever the visitor's browser language is
+  const formattedPrice= `LKR ${Number(amount || 0).toLocaleString("en-US", {
+    minimumFractionDigits:2,
+    maximumFractionDigits:2,
+  })}`
     return <span className={cn("text-sm font-semibold text-darkColor",className)}>{formattedPrice}</span>
   
 }
