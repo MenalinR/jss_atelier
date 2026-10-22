@@ -103,6 +103,8 @@ export type Product = {
   }>;
   stock?: number;
   featured?: boolean;
+  ratingAverage?: number;
+  ratingCount?: number;
   status?: "new" | "hot" | "sale";
   variant?: string;
 };

@@ -20,7 +20,7 @@ interface Props{
 
 // With no categories at all, show every product
 const query = `*[_type == "product" && ($categoryId == "" || references($categoryId))] | order(_createdAt desc) {
-  _id, name, slug, images, price, discount, stock, status, intro, description, medium, dimensions, categories
+  _id, name, slug, images, price, discount, stock, status, ratingAverage, ratingCount, intro, description, medium, dimensions, categories
 }`;
 
 const ProductGrid = ({categories, initialCategorySlug, isAdmin = false}:Props) => {

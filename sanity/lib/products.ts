@@ -1,7 +1,7 @@
 import { client } from './client'
 import { Product } from '@/sanity.types'
 
-const productFields = `_id, _createdAt, name, slug, images, price, discount, stock, status, featured, intro, description, medium, dimensions, categories`
+const productFields = `_id, _createdAt, name, slug, images, price, discount, stock, status, featured, ratingAverage, ratingCount, intro, description, medium, dimensions, categories`
 
 // Fetches products matching a GROQ filter, e.g. `discount > 0`
 export const getProducts = async (

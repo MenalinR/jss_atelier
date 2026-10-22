@@ -77,6 +77,19 @@ export const productType = defineType({
             validation: (Rule) => Rule.min(0),
         }),
         defineField({
+            // Kept up to date automatically when customers review the product
+            name: "ratingAverage",
+            title: "Average Rating",
+            type: "number",
+            readOnly: true,
+        }),
+        defineField({
+            name: "ratingCount",
+            title: "Number of Reviews",
+            type: "number",
+            readOnly: true,
+        }),
+        defineField({
             name: "featured",
             title: "Featured",
             type: "boolean",

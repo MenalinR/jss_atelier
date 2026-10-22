@@ -7,6 +7,7 @@ import { ArrowRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import PriceView from './PriceView'
 import ProductEditor from './admin/ProductEditor'
+import StarRating from './StarRating'
 import { CategoryItem } from '@/sanity/lib/categories'
 
 // Stock label and colour; no label when the admin hasn't set a stock number
@@ -55,6 +56,13 @@ const ProductCard = ({product, categories = [], isAdmin = false, onSaved = () =>
         </div>
         <div className='flex flex-1 flex-col gap-1.5 p-4'>
             <Link href={href}><h2 className='text-base font-semibold text-darkColor line-clamp-1 group-hover:text-brand-700 hoverEffect'>{product?.name}</h2></Link>
+            {!!product?.ratingCount && (
+              <Link href={`${href}#reviews`} className='flex items-center gap-1.5 text-xs text-lightColor'>
+                <StarRating value={product.ratingAverage || 0} starClassName='h-3.5 w-3.5' />
+                <span className='font-semibold text-darkColor'>{product.ratingAverage?.toFixed(1)}</span>
+                <span>({product.ratingCount})</span>
+              </Link>
+            )}
             {product?.intro && <p className='text-lightColor line-clamp-2'>{product.intro}</p>}
             {stock && (
               <span className={cn('mt-1 inline-flex w-fit items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold', stock.className)}>

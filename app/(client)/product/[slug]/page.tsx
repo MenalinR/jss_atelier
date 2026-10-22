@@ -7,6 +7,8 @@ import ProductGallery from '@/components/ProductGallery'
 import PriceView from '@/components/PriceView'
 import AddToCartButton from '@/components/AddToCartButton'
 import RefreshingProductEditor from '@/components/admin/RefreshingProductEditor'
+import ProductReviews from '@/components/reviews/ProductReviews'
+import StarRating from '@/components/StarRating'
 import { client } from '@/sanity/lib/client'
 import { Product } from '@/sanity.types'
 import { getCategories } from '@/sanity/lib/categories'
@@ -55,6 +57,12 @@ const ProductPage = async ({ params }: Props) => {
           <div className='flex flex-col gap-2'>
             <h1 className='text-3xl md:text-4xl font-bold tracking-tight text-darkColor'>{product.name}</h1>
             {product.intro && <p className='text-lg italic text-brand-700'>→ {product.intro}</p>}
+            <a href='#reviews' className='flex w-fit items-center gap-2 text-sm text-lightColor hover:text-brand-700 hoverEffect'>
+              <StarRating value={product.ratingAverage || 0} />
+              {product.ratingCount
+                ? <span><span className='font-semibold text-darkColor'>{product.ratingAverage?.toFixed(1)}</span> ({product.ratingCount} review{product.ratingCount === 1 ? '' : 's'})</span>
+                : <span>No reviews yet</span>}
+            </a>
           </div>
 
           {(product.medium || product.dimensions) && (
@@ -86,6 +94,10 @@ const ProductPage = async ({ params }: Props) => {
             </div>
           )}
         </div>
+      </div>
+
+      <div className='mt-8'>
+        <ProductReviews productId={product._id} />
       </div>
     </Container>
   )
