@@ -5,6 +5,7 @@ import Footer from "@/components/Footer";
 import {ClerkProvider} from "@clerk/nextjs";
 import localFont from "next/font/local";
 import { isAdmin } from "@/lib/admin";
+import CartOwnerSync from "@/components/CartOwnerSync";
 
 const raleway = localFont({
   src: "../fonts/Raleway.woff2",
@@ -34,6 +35,7 @@ export default async function RootLayout({
             Admin mode – use the ✎ buttons to edit the website
           </div>
         )}
+        <CartOwnerSync />
         <Header />
         {children}
         <Footer />
